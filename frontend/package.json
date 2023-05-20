@@ -1,0 +1,19 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "fmt": "npx prettier --loglevel warn --write --plugin-search-dir=. .",
+    "dev": "npm run fmt && vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.1",
+    "prettier": "2.8.8",
+    "prettier-plugin-svelte": "2.10.0",
+    "svelte": "^3.49.0",
+    "vite": "^3.0.7"
+  }
+}
