@@ -28,23 +28,23 @@ println() {
 	printf "\\n"
 }
 
-goClean() {
+godoClean() {
 	println "Cleaning..."
 	rm -rf "build/bin" "frontend/dist"
 	go clean -cache -testcache
 }
 
-goFmt() {
+godoFmt() {
 	println "Formatting..."
 	go fmt ./...
 }
 
-goTest() {
+godoTest() {
 	println "Testing..."
 	go test ./... -timeout $TEST_TIMEOUT
 }
 
-goVet() {
+godoVet() {
 	println "Vetting..."
 	go vet ./...
 }
@@ -72,25 +72,25 @@ fi
 
 if [[ "$1" == "test" ]]; then
 	wailsBuild
-	goFmt
-	goTest
-	goVet
+	godoFmt
+	godoTest
+	godoVet
 	exit 0
 fi
 
 if [[ "$1" == "dev" ]]; then
-	goFmt
-	goTest
-	goVet
+	godoFmt
+	godoTest
+	godoVet
 	wailsDev
 	exit 0
 fi
 
 if [[ "$1" == "build" ]]; then
-	goClean
+	godoClean
 	wailsBuild
-	goTest
-	goVet
+	godoTest
+	godoVet
 	exit 0
 fi
 
