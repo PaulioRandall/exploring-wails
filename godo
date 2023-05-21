@@ -15,6 +15,7 @@ printUsage() {
 	println "Usage:"
 	println "\t" "./godo [help]" "\t\t" "# Print usage"
 	println "\t" "./godo clean " "\t\t" "# Clean build & Go caches"
+	println "\t" "./godo tidy  " "\t\t" "# Tidy Go mod & install packages"
 	println "\t" "./godo test  " "\t\t" "# build -> fmt   -> test -> vet"
 	println "\t" "./godo dev   " "\t\t" "# fmt   -> test  -> vet  -> dev"
 	println "\t" "./godo build " "\t\t" "# clean -> build -> test -> vet"
@@ -32,6 +33,12 @@ godoClean() {
 	println "Cleaning..."
 	rm -rf "build/bin" "frontend/dist"
 	go clean -cache -testcache
+}
+
+godoTidy() {
+	println "Tidying..."
+	go mod tidy
+	npm --prefix "./frontend" install
 }
 
 godoFmt() {
@@ -66,7 +73,12 @@ if [[ "$1" == "" || "$1" == "help" ]]; then
 fi
 
 if [[ "$1" == "clean" ]]; then
-	goClean
+	godoClean
+	exit 0
+fi
+
+if [[ "$1" == "tidy" ]]; then
+	godoTidy
 	exit 0
 fi
 

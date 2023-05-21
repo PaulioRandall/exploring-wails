@@ -13,4 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 'godo' build scripts.
 - Changelog.
 
+### Updated
+
+- Frontend dependencies to latest.
+
 [unreleased]: https://github.com/PaulioRandall/sourcery/compare/1fbd0f1fa807e1e724c825e5031bb7a6db744a4a...HEAD
