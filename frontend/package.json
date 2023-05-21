@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "fmt": "npx prettier --loglevel warn --write --plugin-search-dir=. .",
-    "dev": "npm run fmt && vite",
-    "build": "vite build",
+    "dev": "npm run --silent fmt && vite",
+    "build": "npm run --silent fmt && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
