@@ -15,6 +15,7 @@
   "scripts": {
     "fmt": "npx prettier --loglevel warn --write --plugin-search-dir=. .",
     "dev": "npm run --silent fmt && vite",
+    "debug": "npm run fmt && vite",
     "build": "npm run --silent fmt && vite build",
     "preview": "vite preview"
   },
@@ -24,5 +25,10 @@
     "prettier-plugin-svelte": "2.10.0",
     "svelte": "3.59.1",
     "vite": "4.3.8"
+  },
+  "imports": {
+    "#backend": "./wailsjs/go/main/App.js",
+    "#pages/*": "./src/pages/*",
+    "#assets/*": "./src/assets/*"
   }
 }
