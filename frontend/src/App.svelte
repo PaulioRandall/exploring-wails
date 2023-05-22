@@ -1,5 +1,10 @@
 <script>
-  import GreetingsPage from "#pages/GreetingsPage.svelte";
+  import menuTool from "#menu/+meta.js";
+  import { currTool } from "#tools/store.js";
+
+  if (!$currTool) {
+    currTool.set(menuTool);
+  }
 </script>
 
-<GreetingsPage />
+<svelte:component this={$currTool.component} />

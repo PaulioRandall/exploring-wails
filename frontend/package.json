@@ -28,7 +28,8 @@
   },
   "imports": {
     "#backend": "./wailsjs/go/main/App.js",
-    "#pages/*": "./src/pages/*",
+    "#tools/*": "./src/tools/*",
+    "#menu/*": "./src/menu/*",
     "#assets/*": "./src/assets/*"
   }
 }
