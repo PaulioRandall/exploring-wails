@@ -35,11 +35,11 @@
 		on:keydown="{keyPressed}"
 		on:focusout|preventDefault="{editComplete}">
 		{#if editMode}
-			<input
+			<textarea
 				autofocus
 				type="text"
 				class="edit-text-input"
-				bind:value="{task.text}" />
+				bind:value="{task.text}"></textarea>
 		{:else}
 			<div class="text">{getTaskText()}</div>
 		{/if}
@@ -73,6 +73,7 @@
 	.edit-text-input {
 		flex-grow: 1;
 
+		resize: none;
 		margin: 3px;
 		text-align: center;
 	}

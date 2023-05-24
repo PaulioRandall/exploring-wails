@@ -15,19 +15,7 @@
 		},
 		{
 			id: genId(),
-			text: 'Button to rearrange tasks (cursor drag)',
-		},
-		{
-			id: genId(),
 			text: 'Setup SQLite database to read/write tasks',
-		},
-		{
-			id: genId(),
-			text: 'Use textarea instead of text input for task edits',
-		},
-		{
-			id: genId(),
-			text: 'Restyle input boxes during edits',
 		},
 	]
 
