@@ -20,6 +20,7 @@ printUsage() {
 	println "\t" "./godo dev   " "\t\t" "# fmt   -> test  -> vet  -> dev"
 	println "\t" "./godo debug " "\t\t" "# fmt   -> test  -> vet  -> dev (verbose)"
 	println "\t" "./godo build " "\t\t" "# clean -> build -> test -> vet"
+	println "\t" "./godo commit" "\t\t" "# clean -> fmt -> build -> test -> vet"
 }
 
 println() {
@@ -114,6 +115,15 @@ fi
 
 if [[ "$1" == "build" ]]; then
 	godoClean
+	wailsBuild
+	godoTest
+	godoVet
+	exit 0
+fi
+
+if [[ "$1" == "commit" ]]; then
+	godoClean
+	godoFmt
 	wailsBuild
 	godoTest
 	godoVet

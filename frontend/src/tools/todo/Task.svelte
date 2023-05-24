@@ -2,10 +2,10 @@
   import Node from "./Node.svelte";
 
   export let id;
-  export let text;
+  export let task;
 
   export let whenDeletePressed = (id) => {};
-  export let whenEditComplete = (id, text) => {};
+  export let whenEditComplete = (id, task) => {};
 
   let editMode = false;
 
@@ -22,7 +22,7 @@
 
   const editComplete = () => {
     editMode = false;
-    whenEditComplete(id, text);
+    whenEditComplete(id, task);
   };
 </script>
 
@@ -35,9 +35,14 @@
     on:focusout|preventDefault={editComplete}
   >
     {#if editMode}
-      <input autofocus type="text" class="edit-text-input" bind:value={text} />
+      <input
+        autofocus
+        type="text"
+        class="edit-text-input"
+        bind:value={task.text}
+      />
     {:else}
-      <div class="text">{text}</div>
+      <div class="text">{task.text}</div>
     {/if}
     <div class="delete-btn" on:click|preventDefault={deleteMe}>🗑</div>
   </div>

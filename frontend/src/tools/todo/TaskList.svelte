@@ -3,12 +3,24 @@
   import NewTaskButton from "./NewTaskButton.svelte";
 
   let tasks = [
-    "Move tasks to svelte store",
-    "Button to rearrange tasks (cursor drag)",
-    "Modify tasks so they're objects (create ID generator)",
-    "Setup SQLite database to read/write tasks",
-    "Use textarea instead of text input for task edits",
-    "Restyle input boxes during edits",
+    {
+      text: "Move tasks to svelte store",
+    },
+    {
+      text: "Button to rearrange tasks (cursor drag)",
+    },
+    {
+      text: "Modify tasks so they're objects (create ID generator)",
+    },
+    {
+      text: "Setup SQLite database to read/write tasks",
+    },
+    {
+      text: "Use textarea instead of text input for task edits",
+    },
+    {
+      text: "Restyle input boxes during edits",
+    },
   ];
 
   const newTask = () => {
@@ -21,19 +33,19 @@
     tasks = tasks;
   };
 
-  const updateTaskText = (id, text) => {
-    tasks[id] = text;
+  const updateTask = (id, task) => {
+    tasks[id] = task;
     tasks = tasks;
   };
 </script>
 
 <div class="task-list">
-  {#each tasks as text, i}
+  {#each tasks as task, i}
     <Task
       id={i}
-      {text}
+      {task}
       whenDeletePressed={deleteTask}
-      whenEditComplete={updateTaskText}
+      whenEditComplete={updateTask}
     />
   {/each}
   <NewTaskButton onClick={newTask} />
