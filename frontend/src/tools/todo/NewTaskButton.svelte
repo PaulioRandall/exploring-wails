@@ -1,11 +1,18 @@
 <script>
+	import { tasks, genId } from './store.js'
 	import Node from './Node.svelte'
 
-	export let onClick = () => {}
+	const addEmptyTask = () =>
+		tasks.update((list) => {
+			list.push({
+				id: genId(),
+			})
+			return list
+		})
 </script>
 
 <Node>
-	<div class="new-task-button" on:click|preventDefault="{onClick}">＋</div>
+	<div class="new-task-button" on:click|preventDefault="{addEmptyTask}">＋</div>
 </Node>
 
 <style>

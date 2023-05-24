@@ -1,39 +1,58 @@
 <script>
+	import { tasks } from './store.js'
 	import Node from './Node.svelte'
 
 	export let task
 
-	export let whenDeletePressed = (task) => {}
-	export let whenEditComplete = (task) => {}
-
 	let editMode = false
-
-	const deleteMe = () => whenDeletePressed(task)
-	const editMe = () => (editMode = true)
+	const startEdit = () => (editMode = true)
 
 	const enterKey = 13
 	const keyPressed = (e) => {
 		if (editMode && e.keyCode === enterKey) {
 			e.preventDefault()
-			editComplete()
+			endEdit()
 		}
 	}
 
-	const editComplete = () => {
+	const endEdit = () => {
 		editMode = false
-		whenEditComplete(task)
+		updateTask()
 	}
 
 	const getTaskText = () => (task.text ? task.text : '')
+
+	const taskIdx = () => {
+		for (let i = 0; i < $tasks.length; i++) {
+			if ($tasks[i].id === task.id) {
+				return i
+			}
+		}
+		return -1
+	}
+
+	const deleteTask = () =>
+		tasks.update((list) => {
+			const i = taskIdx(list, task)
+			list.splice(i, 1)
+			return list
+		})
+
+	const updateTask = () =>
+		tasks.update((list) => {
+			const i = taskIdx(list, task)
+			list[i] = task
+			return list
+		})
 </script>
 
 <Node>
 	<div
 		id="{task.id}"
 		class="task"
-		on:click|preventDefault="{editMe}"
+		on:click|preventDefault="{startEdit}"
 		on:keydown="{keyPressed}"
-		on:focusout|preventDefault="{editComplete}">
+		on:focusout|preventDefault="{endEdit}">
 		{#if editMode}
 			<textarea
 				autofocus
@@ -43,7 +62,7 @@
 		{:else}
 			<div class="text">{getTaskText()}</div>
 		{/if}
-		<div class="delete-btn" on:click|preventDefault="{deleteMe}">🗑</div>
+		<div class="delete-btn" on:click|preventDefault="{deleteTask}">🗑</div>
 	</div>
 </Node>
 
