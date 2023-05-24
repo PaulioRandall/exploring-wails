@@ -1,3 +1,3 @@
-import todoMeta from "#tools/todo/+meta.js";
+import todoMeta from '#tools/todo/+meta.js'
 
-export default [todoMeta];
+export default [todoMeta]

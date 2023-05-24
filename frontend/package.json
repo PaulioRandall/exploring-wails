@@ -1,35 +1,35 @@
 {
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "engines": {
-    "node": "18.16.0",
-    "npm": "9.5.1"
-  },
-  "keywords": [
-    "Wails",
-    "Javascript",
-    "Go"
-  ],
-  "scripts": {
-    "fmt": "npx prettier --loglevel warn --write --plugin-search-dir=. .",
-    "dev": "npm run --silent fmt && vite",
-    "debug": "npm run fmt && vite",
-    "build": "npm run --silent fmt && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "2.2.0",
-    "prettier": "2.8.8",
-    "prettier-plugin-svelte": "2.10.0",
-    "svelte": "3.59.1",
-    "vite": "4.3.8"
-  },
-  "imports": {
-    "#backend": "./wailsjs/go/main/App.js",
-    "#tools/*": "./src/tools/*",
-    "#menu/*": "./src/menu/*",
-    "#assets/*": "./src/assets/*"
-  }
+	"name": "frontend",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"engines": {
+		"node": "18.16.0",
+		"npm": "9.5.1"
+	},
+	"keywords": [
+		"Wails",
+		"Javascript",
+		"Go"
+	],
+	"scripts": {
+		"fmt": "npx prettier --loglevel warn --write --plugin-search-dir=. .",
+		"dev": "npm run --silent fmt && vite",
+		"debug": "npm run fmt && vite",
+		"build": "npm run --silent fmt && vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "2.2.0",
+		"prettier": "2.8.8",
+		"prettier-plugin-svelte": "2.10.0",
+		"svelte": "3.59.1",
+		"vite": "4.3.8"
+	},
+	"imports": {
+		"#backend": "./wailsjs/go/main/App.js",
+		"#tools/*": "./src/tools/*",
+		"#menu/*": "./src/menu/*",
+		"#assets/*": "./src/assets/*"
+	}
 }

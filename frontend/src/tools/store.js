@@ -1,3 +1,3 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store'
 
-export const currTool = writable(null);
+export const currTool = writable(null)

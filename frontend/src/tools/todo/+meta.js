@@ -1,6 +1,6 @@
-import Component from "./+main.svelte";
+import Component from './+main.svelte'
 
 export default {
-  name: "Todo",
-  component: Component,
-};
+	name: 'Todo',
+	component: Component,
+}

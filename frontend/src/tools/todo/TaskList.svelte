@@ -1,63 +1,83 @@
 <script>
-  import Task from "./Task.svelte";
-  import NewTaskButton from "./NewTaskButton.svelte";
+	import Task from './Task.svelte'
+	import NewTaskButton from './NewTaskButton.svelte'
 
-  let tasks = [
-    {
-      text: "Move tasks to svelte store",
-    },
-    {
-      text: "Button to rearrange tasks (cursor drag)",
-    },
-    {
-      text: "Modify tasks so they're objects (create ID generator)",
-    },
-    {
-      text: "Setup SQLite database to read/write tasks",
-    },
-    {
-      text: "Use textarea instead of text input for task edits",
-    },
-    {
-      text: "Restyle input boxes during edits",
-    },
-  ];
+	let idPool = 0
+	const genId = () => {
+		idPool++
+		return idPool
+	}
 
-  const newTask = () => {
-    tasks.push("");
-    tasks = tasks;
-  };
+	let tasks = [
+		{
+			id: genId(),
+			text: 'Move tasks to svelte store',
+		},
+		{
+			id: genId(),
+			text: 'Button to rearrange tasks (cursor drag)',
+		},
+		{
+			id: genId(),
+			text: 'Setup SQLite database to read/write tasks',
+		},
+		{
+			id: genId(),
+			text: 'Use textarea instead of text input for task edits',
+		},
+		{
+			id: genId(),
+			text: 'Restyle input boxes during edits',
+		},
+	]
 
-  const deleteTask = (id) => {
-    tasks.splice(id, 1);
-    tasks = tasks;
-  };
+	const taskIdx = (task) => {
+		for (let i = 0; i < tasks.length; i++) {
+			if (tasks[i].id === task.id) {
+				return i
+			}
+		}
+		return -1
+	}
 
-  const updateTask = (id, task) => {
-    tasks[id] = task;
-    tasks = tasks;
-  };
+	const newTask = () => {
+		tasks.push({
+			id: genId(),
+		})
+		tasks = tasks
+	}
+
+	const deleteTask = (task) => {
+		const i = taskIdx(task)
+		console.log(i)
+		tasks.splice(i, 1)
+		tasks = tasks
+	}
+
+	const updateTask = (task) => {
+		const i = taskIdx(task)
+		tasks[i] = task
+		tasks = tasks
+	}
 </script>
 
 <div class="task-list">
-  {#each tasks as task, i}
-    <Task
-      id={i}
-      {task}
-      whenDeletePressed={deleteTask}
-      whenEditComplete={updateTask}
-    />
-  {/each}
-  <NewTaskButton onClick={newTask} />
+	{#each tasks as task (task.id)}
+		<Task
+			task="{task}"
+			whenDeletePressed="{deleteTask}"
+			whenEditComplete="{updateTask}" />
+	{/each}
+	<NewTaskButton onClick="{newTask}" />
 </div>
 
 <style>
-  .task-list {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
+	.task-list {
+		display: flex;
+		flex-direction: column;
+		row-gap: 1rem;
 
-    overflow: scroll;
-    max-height: 100%;
-  }
+		overflow: scroll;
+		max-height: 100%;
+	}
 </style>
