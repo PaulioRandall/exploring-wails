@@ -1,4 +1,6 @@
 <script>
+	import { tasks } from './store.js'
+
 	import Task from './Task.svelte'
 	import NewTaskButton from './NewTaskButton.svelte'
 
@@ -8,49 +10,54 @@
 		return idPool
 	}
 
-	let tasks = [
-		{
-			id: genId(),
-			text: 'Move tasks to svelte store',
-		},
-		{
+	tasks.update((list) => {
+		list.push({
 			id: genId(),
 			text: 'Setup SQLite database to read/write tasks',
-		},
-	]
+		})
 
-	const taskIdx = (task) => {
-		for (let i = 0; i < tasks.length; i++) {
-			if (tasks[i].id === task.id) {
+		list.push({
+			id: genId(),
+			text: 'Tasks should update themselves',
+		})
+
+		return list
+	})
+
+	const taskIdx = (list, task) => {
+		for (let i = 0; i < list.length; i++) {
+			if (list[i].id === task.id) {
 				return i
 			}
 		}
 		return -1
 	}
 
-	const newTask = () => {
-		tasks.push({
-			id: genId(),
+	const newTask = () =>
+		tasks.update((list) => {
+			list.push({
+				id: genId(),
+			})
+			return list
 		})
-		tasks = tasks
-	}
 
-	const deleteTask = (task) => {
-		const i = taskIdx(task)
-		console.log(i)
-		tasks.splice(i, 1)
-		tasks = tasks
-	}
+	const deleteTask = (task) =>
+		tasks.update((list) => {
+			const i = taskIdx(list, task)
+			list.splice(i, 1)
+			return list
+		})
 
-	const updateTask = (task) => {
-		const i = taskIdx(task)
-		tasks[i] = task
-		tasks = tasks
-	}
+	const updateTask = (task) =>
+		tasks.update((list) => {
+			const i = taskIdx(list, task)
+			list[i] = task
+			return list
+		})
 </script>
 
 <div class="task-list">
-	{#each tasks as task (task.id)}
+	{#each $tasks as task (task.id)}
 		<Task
 			task="{task}"
 			whenDeletePressed="{deleteTask}"
