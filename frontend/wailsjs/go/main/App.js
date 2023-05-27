@@ -10,6 +10,10 @@ export function CloseDatabase() {
 	return window['go']['main']['App']['CloseDatabase']()
 }
 
+export function GetFilesInDir(arg1) {
+	return window['go']['main']['App']['GetFilesInDir'](arg1)
+}
+
 export function OpenDatabase(arg1) {
 	return window['go']['main']['App']['OpenDatabase'](arg1)
 }

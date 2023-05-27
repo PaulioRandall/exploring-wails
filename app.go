@@ -3,6 +3,7 @@ package main
 import (
 	//"fmt"
 	"context"
+	"os"
 
 	"github.com/PaulioRandall/go-trackerr"
 
@@ -10,6 +11,7 @@ import (
 )
 
 var (
+	ErrReadingFileList = trackerr.Track("Could not read file list")
 	ErrDatabaseNotOpen = trackerr.Track("Database not open")
 )
 
@@ -36,6 +38,11 @@ func (a *App) shutdown(ctx context.Context) {
 		a.db.Close()
 		a.db = nil
 	}
+}
+
+func (a *App) GetFilesInDir(dir string) ([]os.File, error) {
+	// TODO
+	return nil, ErrReadingFileList
 }
 
 func (a *App) OpenDatabase(file string) error {
