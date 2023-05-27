@@ -21,6 +21,8 @@ printUsage() {
 	println "\t" "./godo debug " "\t\t" "# fmt   -> test  -> vet  -> dev (verbose)"
 	println "\t" "./godo build " "\t\t" "# clean -> build -> test -> vet"
 	println "\t" "./godo commit" "\t\t" "# clean -> fmt -> build -> test -> vet"
+	println "\t" "Go"
+	println "\t" "./godo go test" "\t\t" "# fmt -> test -> vet"
 }
 
 println() {
@@ -43,24 +45,24 @@ godoTidy() {
 	npm --prefix "./frontend" install
 }
 
-godoFmt() {
+goFmt() {
 	println "Formatting..."
 	go fmt ./...
 }
 
-godoTest() {
+goTest() {
 	println "Testing..."
 	go test ./... -timeout $TEST_TIMEOUT
 }
 
-godoVet() {
+goVet() {
 	println "Vetting..."
 	go vet ./...
 }
 
 wailsBuild() {
 	println "Building..."
-	wails build -v 0
+	wails build -v 1
 }
 
 wailsDev() {
@@ -91,24 +93,24 @@ fi
 
 if [[ "$1" == "test" ]]; then
 	wailsBuild
-	godoFmt
-	godoTest
-	godoVet
+	goFmt
+	goTest
+	goVet
 	exit 0
 fi
 
 if [[ "$1" == "dev" ]]; then
-	godoFmt
-	godoTest
-	godoVet
+	goFmt
+	goTest
+	goVet
 	wailsDev
 	exit 0
 fi
 
 if [[ "$1" == "debug" ]]; then
-	godoFmt
-	godoTest
-	godoVet
+	goFmt
+	goTest
+	goVet
 	wailsDebug
 	exit 0
 fi
@@ -116,18 +118,31 @@ fi
 if [[ "$1" == "build" ]]; then
 	godoClean
 	wailsBuild
-	godoTest
-	godoVet
+	goTest
+	goVet
 	exit 0
 fi
 
 if [[ "$1" == "commit" ]]; then
 	godoClean
-	godoFmt
+	goFmt
 	wailsBuild
-	godoTest
-	godoVet
+	goTest
+	goVet
 	exit 0
+fi
+
+if [[ "$1" == "go" ]]; then
+	if [[ "$2" == "test" ]]; then
+		goFmt
+		goTest
+		goVet
+		exit 0
+	fi
+
+	println "I don't understand the option '$1 $2'."
+	printUsage
+	exit 1
 fi
 
 println "I don't understand the option '$1'."

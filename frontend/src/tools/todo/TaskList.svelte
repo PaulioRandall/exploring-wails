@@ -15,6 +15,11 @@
 			text: 'Add top menu bar componnet with back to main menu button',
 		})
 
+		list.push({
+			id: genId(),
+			text: 'Change dev port to 3000',
+		})
+
 		return list
 	})
 </script>

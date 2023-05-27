@@ -1,14 +1,27 @@
 <script>
 	import { tasks, genId } from './store.js'
+	import { AddTask } from '#backend'
+
 	import Node from './Node.svelte'
 
-	const addEmptyTask = () =>
+	const addEmptyTask = () => {
+		const task = {
+			id: genId(),
+		}
+
 		tasks.update((list) => {
-			list.push({
-				id: genId(),
-			})
+			list.push(task)
 			return list
 		})
+
+		AddTask(task)
+			.then((v) => {
+				console.log('Success')
+			})
+			.catch((e) => {
+				console.log(e)
+			})
+	}
 </script>
 
 <Node>

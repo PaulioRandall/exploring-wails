@@ -1,27 +1,71 @@
 package main
 
 import (
+	//"fmt"
 	"context"
-	"fmt"
+
+	"github.com/PaulioRandall/go-trackerr"
+
+	"github.com/PaulioRandall/sourcery/backend/database"
 )
 
-// App struct
-type App struct {
-	ctx context.Context
+var (
+	ErrDatabaseNotOpen = trackerr.Track("Database not open")
+)
+
+type DB interface {
+	Close() error
+	AddTask(task database.Task) error
 }
 
-// NewApp creates a new App application struct
+type App struct {
+	ctx context.Context
+	db  DB
+}
+
 func NewApp() *App {
 	return &App{}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) shutdown(ctx context.Context) {
+	if a.db != nil {
+		a.db.Close()
+		a.db = nil
+	}
+}
+
+func (a *App) OpenDatabase(file string) error {
+	if a.db != nil {
+		return nil
+	}
+
+	var e error
+	a.db, e = database.Open(file)
+	return e
+}
+
+func (a *App) CloseDatabase() error {
+	if a.db == nil {
+		return nil
+	}
+
+	e := a.db.Close()
+	if e != nil {
+		return e
+	}
+
+	a.db = nil
+	return nil
+}
+
+func (a *App) AddTask(task database.Task) error {
+	if a.db == nil {
+		return ErrDatabaseNotOpen
+	}
+
+	return a.db.AddTask(task)
 }

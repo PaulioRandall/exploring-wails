@@ -1,8 +1,11 @@
-module github.com/PaulioRandall/sourcery.git
+module github.com/PaulioRandall/sourcery
 
 go 1.18
 
-require github.com/wailsapp/wails/v2 v2.5.1
+require (
+	github.com/PaulioRandall/go-trackerr v0.14.0
+	github.com/wailsapp/wails/v2 v2.5.1
+)
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect
