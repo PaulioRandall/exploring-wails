@@ -1,4 +1,7 @@
 <script>
+	import { onMount } from 'svelte'
+	import { ToAbsPath } from '#backend'
+
 	import Button from '#lib/button/Button.svelte'
 	import ButtonSpacer from '#lib/button/ButtonSpacer.svelte'
 	import ButtonBar from '#lib/button/ButtonBar.svelte'
@@ -7,22 +10,43 @@
 	export let on_select = (dbFile) => {}
 	export let on_close = () => {}
 
-	let dbFile = ''
+	let dir = '.'
+	let selected
+	let reset
+	let buttonText
 
-	const fileSelected = (file) => {
-		dbFile = file
+	$: if (!selected) {
+		buttonText = '...'
+	} else if (selected.IsDir) {
+		buttonText = 'Open'
+	} else {
+		buttonText = 'Connect'
 	}
 
-	const connectToDB = () => {
-		on_select(dbFile)
+	const useSelectedFile = () => {
+		if (selected.IsDir) {
+			dir = selected.AbsPath
+		} else {
+			on_select(selected.AbsPath)
+		}
 	}
+
+	onMount(async () => {
+		dir = await ToAbsPath(dir)
+	})
 </script>
 
 <div class="database-browser-modal">
-	<div class="window">
-		<FileSelector on_select="{fileSelected}" />
+	<div class="modal" on:click|stopPropagation="{reset}">
+		<div class="header">{dir}</div>
+		<FileSelector
+			open_at="{dir}"
+			bind:selected="{selected}"
+			bind:reset="{reset}" />
+		<div class="spacer"></div>
 		<ButtonBar>
-			<Button disabled="{!dbFile}" on_click="{connectToDB}">Connect</Button>
+			<Button disabled="{!selected}" on_click="{useSelectedFile}"
+				>{buttonText}</Button>
 			<ButtonSpacer />
 			<Button type="cancel" on_click="{on_close}">Close</Button>
 		</ButtonBar>
@@ -43,20 +67,42 @@
 		background: rgba(0, 0, 0, 0.3);
 	}
 
-	.window {
+	.modal {
 		flex-grow: 1;
 
 		display: flex;
 		flex-direction: column;
 
-		margin: 20%;
+		margin: 4rem;
 
-		background: grey;
+		background: lightgrey;
 		border: 2px solid goldenrod;
 		border-radius: 0.4rem;
 	}
 
-	.window > :global(:first-child) {
+	.spacer {
 		flex-grow: 1;
+		border-bottom: 2px solid goldenrod;
+	}
+
+	.header {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		font-size: 18px;
+		color: black;
+
+		height: 4rem;
+		background: darkgrey;
+
+		border-bottom: 2px solid goldenrod;
+	}
+
+	.divider {
+		margin: 0 0 2px 0;
+		padding: 0;
+
+		border-bottom: 2px solid goldenrod;
 	}
 </style>

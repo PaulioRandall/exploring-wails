@@ -3,15 +3,14 @@ package main
 import (
 	//"fmt"
 	"context"
-	"os"
 
 	"github.com/PaulioRandall/go-trackerr"
 
 	"github.com/PaulioRandall/sourcery/backend/database"
+	"github.com/PaulioRandall/sourcery/backend/files"
 )
 
 var (
-	ErrReadingFileList = trackerr.Track("Could not read file list")
 	ErrDatabaseNotOpen = trackerr.Track("Database not open")
 )
 
@@ -40,9 +39,12 @@ func (a *App) shutdown(ctx context.Context) {
 	}
 }
 
-func (a *App) GetFilesInDir(dir string) ([]os.File, error) {
-	// TODO
-	return nil, ErrReadingFileList
+func (a *App) ListFilesInDir(dir string) ([]files.ReadOnlyFile, error) {
+	return files.ListFilesInDir(dir)
+}
+
+func (a *App) ToAbsPath(path string) (string, error) {
+	return files.ToAbsPath(path)
 }
 
 func (a *App) OpenDatabase(file string) error {

@@ -10,10 +10,14 @@ export function CloseDatabase() {
 	return window['go']['main']['App']['CloseDatabase']()
 }
 
-export function GetFilesInDir(arg1) {
-	return window['go']['main']['App']['GetFilesInDir'](arg1)
+export function ListFilesInDir(arg1) {
+	return window['go']['main']['App']['ListFilesInDir'](arg1)
 }
 
 export function OpenDatabase(arg1) {
 	return window['go']['main']['App']['OpenDatabase'](arg1)
+}
+
+export function ToAbsPath(arg1) {
+	return window['go']['main']['App']['ToAbsPath'](arg1)
 }

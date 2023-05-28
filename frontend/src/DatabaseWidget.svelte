@@ -2,6 +2,9 @@
 	import { OpenDatabase } from '#backend'
 	import DatabaseBrowserModal from './DatabaseBrowserModal.svelte'
 
+	let browsingForDB = false
+	let dbFile = null
+
 	const openFileBrowser = (e) => {
 		browsingForDB = !browsingForDB
 	}
@@ -20,8 +23,6 @@
 	const closeDatabaseBrowser = () => {
 		browsingForDB = false
 	}
-
-	let browsingForDB = false
 </script>
 
 {#if browsingForDB}
@@ -30,7 +31,10 @@
 		on_close="{closeDatabaseBrowser}" />
 {/if}
 
-<div class="database-widget" on:click|stopPropagation="{openFileBrowser}">
+<div
+	on:click|stopPropagation="{openFileBrowser}"
+	class="database-widget"
+	class:db-open="{!!dbFile}">
 	DB
 </div>
 
@@ -44,15 +48,20 @@
 		justify-content: center;
 		align-items: center;
 
-		width: 100px;
-		height: 100px;
+		width: 3rem;
+		height: 3rem;
+		padding-left: 0.4rem;
 
 		font-weight: bold;
-		font-size: 32px;
+		font-size: 24px;
 		cursor: pointer;
 		user-select: none;
 
+		background: indianred;
+		border-top-left-radius: 1.2rem;
+	}
+
+	.db-open {
 		background: darkgreen;
-		border-top-left-radius: 2rem;
 	}
 </style>
