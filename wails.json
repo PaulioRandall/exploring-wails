@@ -6,6 +6,7 @@
   "frontend:build": "npm run --silent build",
   "frontend:dev:watcher": "npm run --silent dev",
   "frontend:dev:serverUrl": "auto",
+  "devServer": "localhost:3000",
   "author": {
     "name": "Paulio",
     "email": "pauliorandall@gmail.com"

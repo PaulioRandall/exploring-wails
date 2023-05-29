@@ -3,7 +3,7 @@ module github.com/PaulioRandall/sourcery
 go 1.18
 
 require (
-	github.com/PaulioRandall/go-trackerr v0.14.0
+	github.com/PaulioRandall/go-trackerr v0.17.0
 	github.com/wailsapp/wails/v2 v2.5.1
 )
 

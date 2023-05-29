@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ErrOpeningDatabase = trackerr.Track("Could not open database")
-	ErrClosingDatabase = trackerr.Track("Could not close database")
+	ErrOpeningDatabase = trackerr.New("Could not open database")
+	ErrClosingDatabase = trackerr.New("Could not close database")
 
-	ErrAddingTask = trackerr.Track("Failed to add task to database")
+	ErrAddingTask = trackerr.New("Failed to add task to database")
 )
 
 type database struct {
