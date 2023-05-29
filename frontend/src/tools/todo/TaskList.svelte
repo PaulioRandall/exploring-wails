@@ -12,12 +12,22 @@
 
 		list.push({
 			id: genId(),
-			text: 'Add top menu bar componnet with back to main menu button',
+			text: 'Convert DatabaseWidget to AppMenuBar with tabs that allow user to navigate between different apps.',
 		})
 
 		list.push({
 			id: genId(),
-			text: 'Change dev port to 3000',
+			text: 'Replace intro menu page with splash screen + add splash screen to AppMenuBar',
+		})
+
+		list.push({
+			id: genId(),
+			text: 'Allow tasks to have sub-tasks.',
+		})
+
+		list.push({
+			id: genId(),
+			text: 'Represent tasks & their sub-tasks as horizontal tree.',
 		})
 
 		return list

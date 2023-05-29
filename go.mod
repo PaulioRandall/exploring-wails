@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/PaulioRandall/go-trackerr v0.17.0
+	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/wailsapp/wails/v2 v2.5.1
 )
 
