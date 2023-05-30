@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrReadingFileList = trackerr.New("Could not read files in directory")
+	ErrReadingFileStat = trackerr.New("Could not read file status (os.Stat)")
 	ErrCreatingAbsPath = trackerr.New("Could not create absolute file path")
 )
 
@@ -22,24 +23,32 @@ type ReadOnlyFile struct {
 func ListFilesInDir(dir string) ([]ReadOnlyFile, error) {
 	children, e := os.ReadDir(dir)
 	if e != nil {
-		return nil, ErrReadingFileList.CausedBy(e)
+		return errReadingFileList(e, dir)
 	}
 
 	files := make([]ReadOnlyFile, len(children)+1)
 
-	files[0], e = createParentDirEntry(dir)
-	if e != nil {
-		return nil, ErrReadingFileList.CausedBy(e)
-	}
-
-	for i := 0; i < len(children); i++ {
-		files[i+1], e = mapToReadOnlyFile(dir, children[i])
+	i := 0
+	if dir != "/" {
+		files[i], e = createParentDirEntry(dir)
+		i++
 		if e != nil {
-			return nil, ErrReadingFileList.CausedBy(e)
+			return errReadingFileList(e, dir)
 		}
 	}
 
-	return files, e
+	for ; i < len(children); i++ {
+		files[i], e = mapToReadOnlyFile(dir, children[i])
+		if e != nil {
+			return errReadingFileList(e, dir)
+		}
+	}
+
+	return files, nil
+}
+
+func errReadingFileList(e error, dir string) ([]ReadOnlyFile, error) {
+	return nil, ErrReadingFileList.BecauseOf(e, "For '%s'", dir)
 }
 
 func mapToReadOnlyFile(parent string, file os.DirEntry) (ReadOnlyFile, error) {
@@ -99,7 +108,7 @@ func ToAbsPath(path string) (string, error) {
 func isFileDir(path string) (bool, error) {
 	info, e := os.Stat(path)
 	if e != nil {
-		return false, ErrReadingFileList.CausedBy(e)
+		return false, ErrReadingFileStat.CausedBy(e)
 	}
 	return info.IsDir(), nil
 }

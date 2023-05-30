@@ -13,6 +13,7 @@ var (
 
 	ErrCreatingDB = trackerr.New("Could not create database")
 	ErrOpeningDB  = trackerr.New("Could not open database")
+	ErrInvalidDB  = trackerr.New("Not a valid database")
 	ErrClosingDB  = trackerr.New("Could not close database")
 
 	ErrAddingTask = trackerr.New("Failed to add task to database")
@@ -37,7 +38,7 @@ type sqliteDB struct {
 }
 
 func NewSQLite(file string) (*sqliteDB, error) {
-	return nil, ErrSQLite.CausedBy(ErrCreatingDB.CausedBy(trackerr.ErrTodo))
+	return nil, ErrSQLite.ContextFor(ErrCreatingDB, trackerr.ErrTodo)
 }
 
 func OpenSQLite(file string) (*sqliteDB, error) {
@@ -45,11 +46,17 @@ func OpenSQLite(file string) (*sqliteDB, error) {
 
 	conn, e := sql.Open("sqlite3", fileURL)
 	if e != nil {
-		return nil, ErrSQLite.CausedBy(ErrOpeningDB.CausedBy(e))
+		return nil, ErrSQLite.ContextFor(ErrOpeningDB, e)
 	}
 
 	db := &sqliteDB{
 		conn: conn,
+	}
+
+	e = db.validate()
+	if e != nil {
+		db.Close()
+		return nil, ErrSQLite.CausedBy(e)
 	}
 
 	// TODO: query to check that it is actually a SQLite database
@@ -59,15 +66,19 @@ func OpenSQLite(file string) (*sqliteDB, error) {
 	return db, nil
 }
 
+func (db *sqliteDB) validate() error {
+	return ErrInvalidDB
+}
+
 func (db *sqliteDB) Close() error {
 	e := db.conn.Close()
 	if e != nil {
-		return ErrSQLite.CausedBy(ErrClosingDB.CausedBy(e))
+		return ErrSQLite.ContextFor(ErrClosingDB, e)
 	}
 	return nil
 }
 
 func (db *sqliteDB) AddTask(task Task) error {
 	// TODO
-	return ErrSQLite.CausedBy(ErrAddingTask.CausedBy(trackerr.ErrTodo))
+	return ErrSQLite.ContextFor(ErrAddingTask, trackerr.ErrTodo)
 }

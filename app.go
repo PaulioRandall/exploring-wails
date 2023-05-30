@@ -39,7 +39,7 @@ func (a *App) shutdown(ctx context.Context) {
 }
 
 func (a *App) ListFilesInDir(dir string) ([]files.ReadOnlyFile, error) {
-	return files.ListFilesInDir(dir)
+	return squashResult(files.ListFilesInDir(dir))
 }
 
 func (a *App) ToAbsPath(path string) (string, error) {
@@ -53,8 +53,11 @@ func (a *App) OpenDatabase(file string) (any, error) {
 
 	var e error
 	a.db, e = database.OpenSQLite(file)
-	println(a.db)
-	return nil, e
+	if e != nil {
+		return nil, squashIfError(e)
+	}
+
+	return nil, nil
 }
 
 func (a *App) CloseDatabase() (any, error) {
@@ -64,7 +67,7 @@ func (a *App) CloseDatabase() (any, error) {
 
 	e := a.db.Close()
 	if e != nil {
-		return nil, e
+		return nil, squashIfError(e)
 	}
 
 	a.db = nil
@@ -77,4 +80,18 @@ func (a *App) AddTask(task database.Task) (any, error) {
 	}
 
 	return nil, a.db.AddTask(task)
+}
+
+func squashResult[T any](v T, e error) (T, error) {
+	if e != nil {
+		return v, trackerr.Squash(e)
+	}
+	return v, nil
+}
+
+func squashIfError(e error) error {
+	if e != nil {
+		return trackerr.Squash(e)
+	}
+	return nil
 }
