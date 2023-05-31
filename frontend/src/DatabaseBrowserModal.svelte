@@ -7,6 +7,8 @@
 	import ButtonBar from '#lib/button/ButtonBar.svelte'
 	import FileSelector from '#lib/FileSelector.svelte'
 
+	import NewDatabaseBar from './NewDatabaseBar.svelte'
+
 	export let on_select = (dbFile) => {}
 	export let on_close = () => {}
 
@@ -14,6 +16,8 @@
 	let selected
 	let reset
 	let buttonText
+
+	let newFileName = ''
 
 	$: if (!selected) {
 		buttonText = '...'
@@ -23,6 +27,10 @@
 		buttonText = 'Connect'
 	}
 
+	onMount(async () => {
+		dir = await ToAbsPath(dir)
+	})
+
 	const useSelectedFile = () => {
 		if (selected.IsDir) {
 			dir = selected.AbsPath
@@ -31,9 +39,10 @@
 		}
 	}
 
-	onMount(async () => {
-		dir = await ToAbsPath(dir)
-	})
+	const newDatabase = (name) => {
+		console.log('Creating new database:', name)
+		// NEXT: Call backend to create database and close modal
+	}
 </script>
 
 <div class="database-browser-modal">
@@ -42,11 +51,14 @@
 		<FileSelector open_at={dir} bind:selected bind:reset />
 		<div class="spacer" />
 		<ButtonBar>
-			<Button disabled={!selected} on_click={useSelectedFile}
-				>{buttonText}</Button>
+			<Button disabled={!selected} on_click={useSelectedFile}>
+				{buttonText}
+			</Button>
 			<ButtonSpacer />
 			<Button type="cancel" on_click={on_close}>Close</Button>
 		</ButtonBar>
+		<div class="spacer" />
+		<NewDatabaseBar on_create={newDatabase} />
 	</div>
 </div>
 
