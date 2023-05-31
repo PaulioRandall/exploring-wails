@@ -48,21 +48,21 @@
 
 <Node>
 	<div
-		id="{task.id}"
+		id={task.id}
 		class="task"
-		on:click|preventDefault="{startEdit}"
-		on:keydown="{keyPressed}"
-		on:focusout|preventDefault="{endEdit}">
+		on:click|preventDefault={startEdit}
+		on:keydown={keyPressed}
+		on:focusout|preventDefault={endEdit}>
 		{#if editMode}
 			<textarea
 				autofocus
 				type="text"
 				class="edit-text-input"
-				bind:value="{task.text}"></textarea>
+				bind:value={task.text} />
 		{:else}
 			<div class="text">{getTaskText()}</div>
 		{/if}
-		<div class="delete-btn" on:click|preventDefault="{deleteTask}">🗑</div>
+		<div class="delete-btn" on:click|preventDefault={deleteTask}>🗑</div>
 	</div>
 </Node>
 

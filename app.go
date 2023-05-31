@@ -6,6 +6,7 @@ import (
 	"github.com/PaulioRandall/go-trackerr"
 
 	"github.com/PaulioRandall/sourcery/backend/database"
+	"github.com/PaulioRandall/sourcery/backend/database/sqlite"
 	"github.com/PaulioRandall/sourcery/backend/files"
 )
 
@@ -52,7 +53,7 @@ func (a *App) OpenDatabase(file string) (any, error) {
 	}
 
 	var e error
-	a.db, e = database.OpenSQLite(file)
+	a.db, e = sqlite.Open(file)
 	if e != nil {
 		return nil, squashIfError(e)
 	}

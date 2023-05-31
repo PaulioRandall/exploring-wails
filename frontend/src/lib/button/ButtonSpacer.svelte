@@ -1,4 +1,4 @@
-<div class="button-spacer"></div>
+<div class="button-spacer" />
 
 <style>
 	.button-spacer {

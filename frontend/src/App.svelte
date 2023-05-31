@@ -9,7 +9,7 @@
 </script>
 
 <div class="app">
-	<svelte:component this="{$currTool.component}" />
+	<svelte:component this={$currTool.component} />
 	<DatabaseWidget />
 </div>
 

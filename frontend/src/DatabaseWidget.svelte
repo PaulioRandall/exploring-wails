@@ -27,14 +27,14 @@
 
 {#if browsingForDB}
 	<DatabaseBrowserModal
-		on_select="{openDatabaseFile}"
-		on_close="{closeDatabaseBrowser}" />
+		on_select={openDatabaseFile}
+		on_close={closeDatabaseBrowser} />
 {/if}
 
 <div
-	on:click|stopPropagation="{openFileBrowser}"
+	on:click|stopPropagation={openFileBrowser}
 	class="database-widget"
-	class:db-open="{!!dbFile}">
+	class:db-open={!!dbFile}>
 	DB
 </div>
 

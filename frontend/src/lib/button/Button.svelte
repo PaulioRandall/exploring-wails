@@ -6,11 +6,11 @@
 </script>
 
 <button
-	disabled="{disabled}"
+	{disabled}
 	class="button"
-	class:submit-type="{type === 'submit'}"
-	class:cancel-type="{type === 'cancel'}"
-	on:click="{on_click}">
+	class:submit-type={type === 'submit'}
+	class:cancel-type={type === 'cancel'}
+	on:click={on_click}>
 	<slot />
 </button>
 

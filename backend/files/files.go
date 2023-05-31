@@ -29,6 +29,7 @@ func ListFilesInDir(dir string) ([]ReadOnlyFile, error) {
 	files := make([]ReadOnlyFile, len(children)+1)
 
 	i := 0
+
 	if dir != "/" {
 		files[i], e = createParentDirEntry(dir)
 		i++
@@ -60,7 +61,6 @@ func mapToReadOnlyFile(parent string, file os.DirEntry) (ReadOnlyFile, error) {
 
 	rof.Name = file.Name()
 	rof.Path = filepath.Join(parent, rof.Name)
-	rof.IsDir = true
 
 	rof.AbsPath, e = ToAbsPath(rof.Path)
 	if e != nil {

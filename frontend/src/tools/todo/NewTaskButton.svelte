@@ -25,7 +25,7 @@
 </script>
 
 <Node>
-	<div class="new-task-button" on:click|preventDefault="{addEmptyTask}">＋</div>
+	<div class="new-task-button" on:click|preventDefault={addEmptyTask}>＋</div>
 </Node>
 
 <style>

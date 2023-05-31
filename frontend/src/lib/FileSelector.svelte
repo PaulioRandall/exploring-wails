@@ -35,9 +35,9 @@
 <div class="file-selector">
 	{#each files as f, i (f.Name)}
 		<div
-			on:click|stopPropagation="{select(i)}"
+			on:click|stopPropagation={select(i)}
 			class="file"
-			class:selected-file="{selectedIndex === i}">
+			class:selected-file={selectedIndex === i}>
 			{f.Name}
 			{#if f.IsDir}
 				<span>📁</span>

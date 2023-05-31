@@ -36,7 +36,7 @@
 
 <div class="task-list">
 	{#each $tasks as task (task.id)}
-		<Task task="{task}" />
+		<Task {task} />
 	{/each}
 	<NewTaskButton />
 </div>

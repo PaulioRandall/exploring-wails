@@ -10,7 +10,7 @@
 <main class="main">
 	<div class="menu">
 		{#each toolList as tool}
-			<div class="tool" on:click="{() => navToTool(tool)}">
+			<div class="tool" on:click={() => navToTool(tool)}>
 				<p class="tool-name">{tool.name}</p>
 			</div>
 		{/each}

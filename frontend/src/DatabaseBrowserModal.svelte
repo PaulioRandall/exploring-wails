@@ -37,18 +37,15 @@
 </script>
 
 <div class="database-browser-modal">
-	<div class="modal" on:click|stopPropagation="{reset}">
+	<div class="modal" on:click|stopPropagation={reset}>
 		<div class="header">{dir}</div>
-		<FileSelector
-			open_at="{dir}"
-			bind:selected="{selected}"
-			bind:reset="{reset}" />
-		<div class="spacer"></div>
+		<FileSelector open_at={dir} bind:selected bind:reset />
+		<div class="spacer" />
 		<ButtonBar>
-			<Button disabled="{!selected}" on_click="{useSelectedFile}"
+			<Button disabled={!selected} on_click={useSelectedFile}
 				>{buttonText}</Button>
 			<ButtonSpacer />
-			<Button type="cancel" on_click="{on_close}">Close</Button>
+			<Button type="cancel" on_click={on_close}>Close</Button>
 		</ButtonBar>
 	</div>
 </div>
