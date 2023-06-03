@@ -21,7 +21,8 @@ type App struct {
 }
 
 var (
-	ErrDatabaseNotOpen = trackerr.Track("Database not open")
+	ErrDatabaseNotOpen     = trackerr.Track("Database not open")
+	ErrDatabaseAlreadyOpen = trackerr.Track("Another database is already open")
 )
 
 func NewApp() *App {
@@ -44,21 +45,22 @@ func (a *App) ListFilesInDir(dir string) ([]files.ReadOnlyFile, error) {
 }
 
 func (a *App) ToAbsPath(path string) (string, error) {
-	return files.ToAbsPath(path)
+	return squashResult(files.ToAbsPath(path))
+}
+
+func (a *App) CreateDatabase(file string) (any, error) {
+	e := sqlite.Create(file)
+	return nil, squashIfError(e)
 }
 
 func (a *App) OpenDatabase(file string) (any, error) {
 	if a.db != nil {
-		return nil, nil
+		return nil, trackerr.Squash(ErrDatabaseAlreadyOpen)
 	}
 
 	var e error
 	a.db, e = sqlite.Open(file)
-	if e != nil {
-		return nil, squashIfError(e)
-	}
-
-	return nil, nil
+	return nil, squashIfError(e)
 }
 
 func (a *App) CloseDatabase() (any, error) {
@@ -67,20 +69,15 @@ func (a *App) CloseDatabase() (any, error) {
 	}
 
 	e := a.db.Close()
-	if e != nil {
-		return nil, squashIfError(e)
-	}
-
 	a.db = nil
-	return nil, nil
+	return nil, squashIfError(e)
 }
 
 func (a *App) AddTask(task database.Task) (any, error) {
 	if a.db == nil {
-		return nil, ErrDatabaseNotOpen
+		return nil, squashIfError(ErrDatabaseNotOpen)
 	}
-
-	return nil, a.db.AddTask(task)
+	return nil, squashIfError(a.db.AddTask(task))
 }
 
 func squashResult[T any](v T, e error) (T, error) {

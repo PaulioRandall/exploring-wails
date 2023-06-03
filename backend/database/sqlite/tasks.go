@@ -14,5 +14,5 @@ var (
 
 func (db *sqliteDB) AddTask(task database.Task) error {
 	// TODO
-	return ErrSQLite.ContextFor(ErrAddingTask, trackerr.ErrTodo)
+	return ErrSQLite.CausedBy(trackerr.ErrTodo, ErrAddingTask)
 }

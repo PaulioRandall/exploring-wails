@@ -1,25 +1,34 @@
 <script>
+	import { CreateDatabase } from '#backend'
+
 	import Button from '#lib/button/Button.svelte'
 	import TextInput from '#lib/TextInput.svelte'
 
-	export let on_create = (name) => {}
-
+	export let on_create = () => {}
+	export let dir = '.'
 	let name = ''
-	const acceptName = () => on_create(name)
 
 	// TODO: validate name is not already taken by calling backend
 	// TODO: Disable when typing, add debounce, when stop typing check name
 	//       is not empty and also not already taken
 	$: nameIsValid = !!name
+
+	const createDatabase = () => {
+		const file = `${dir}/${name}`
+		console.log('Creating new database:', file)
+
+		CreateDatabase(file).then(on_create).catch(console.error)
+	}
 </script>
 
-<div class="new-database-bar">
-	<Button disabled={!nameIsValid} on_click={acceptName}>New database</Button>
+<div class="create-database-bar">
+	<Button disabled={!nameIsValid} on_click={createDatabase}
+		>Create database</Button>
 	<TextInput bind:value={name} />
 </div>
 
 <style>
-	.new-database-bar {
+	.create-database-bar {
 		align-self: stretch;
 
 		display: flex;

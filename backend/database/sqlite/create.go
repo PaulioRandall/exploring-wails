@@ -13,12 +13,12 @@ var (
 	ErrCreatingTables = trackerr.New("Could not create database tables")
 )
 
-func New(file string) (*sqliteDB, error) {
+func Create(file string) error {
 	// TODO
-	return nil, ErrSQLite.ContextFor(ErrCreatingDB, trackerr.ErrTodo)
+	return ErrSQLite.CausedBy(trackerr.ErrTodo, ErrCreatingDB)
 }
 
 func (db *sqliteDB) createTables(task database.Task) error {
 	// TODO
-	return ErrSQLite.ContextFor(ErrCreatingTables, trackerr.ErrTodo)
+	return ErrSQLite.CausedBy(trackerr.ErrTodo, ErrCreatingTables)
 }

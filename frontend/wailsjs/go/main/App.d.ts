@@ -7,6 +7,8 @@ export function AddTask(arg1: database.Task): Promise<any>
 
 export function CloseDatabase(): Promise<any>
 
+export function CreateDatabase(arg1: string): Promise<any>
+
 export function ListFilesInDir(arg1: string): Promise<Array<files.ReadOnlyFile>>
 
 export function OpenDatabase(arg1: string): Promise<any>

@@ -18,7 +18,7 @@ func Open(file string) (*sqliteDB, error) {
 
 	conn, e := sql.Open("sqlite3", fileURL)
 	if e != nil {
-		return nil, ErrSQLite.ContextFor(ErrOpeningDB, e)
+		return nil, ErrSQLite.CausedBy(e, ErrOpeningDB)
 	}
 
 	db := &sqliteDB{
@@ -46,7 +46,7 @@ func (db *sqliteDB) validate() error {
 func (db *sqliteDB) Close() error {
 	e := db.conn.Close()
 	if e != nil {
-		return ErrSQLite.ContextFor(ErrClosingDB, e)
+		return ErrSQLite.CausedBy(e, ErrClosingDB)
 	}
 	return nil
 }

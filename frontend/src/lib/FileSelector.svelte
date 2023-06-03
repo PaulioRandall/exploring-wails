@@ -1,9 +1,13 @@
 <script>
-	import { ListFilesInDir } from '#backend'
+	import { ToAbsPath, ListFilesInDir } from '#backend'
 
 	export function reset() {
 		selectedIndex = null
 		selected = null
+	}
+
+	export function refresh() {
+		open_at = open_at
 	}
 
 	export let open_at = '.'
@@ -22,7 +26,13 @@
 		}
 	}
 
-	$: ListFilesInDir(open_at)
+	$: ToAbsPath(open_at)
+		.then((path) => {
+			open_at = path
+		})
+		.then(() => {
+			return ListFilesInDir(open_at)
+		})
 		.then((res) => {
 			files = res
 		})
