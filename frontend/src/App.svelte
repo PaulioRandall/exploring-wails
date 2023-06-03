@@ -1,5 +1,5 @@
 <script>
-	import DatabaseWidget from './DatabaseWidget.svelte'
+	import DatabaseManager from './DatabaseManager.svelte'
 	import menuTool from '#menu/+meta.js'
 	import { currTool } from '#tools/store.js'
 
@@ -10,14 +10,16 @@
 
 <div class="app">
 	<svelte:component this={$currTool.component} />
-	<DatabaseWidget />
+	<DatabaseManager />
 </div>
 
 <style>
 	.app {
+		position: relative;
+
 		width: 100vw;
 		height: 100vh;
 
-		position: relative;
+		overflow: hidden;
 	}
 </style>

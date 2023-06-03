@@ -3,6 +3,7 @@ package files
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/PaulioRandall/go-trackerr"
 )
@@ -14,10 +15,34 @@ var (
 )
 
 type ReadOnlyFile struct {
-	Name    string
-	Path    string
-	AbsPath string
-	IsDir   bool
+	Name    string `json:"name"`
+	Path    string `json:"path"`
+	AbsPath string `json:"absPath"`
+	IsDir   bool   `json:"isDir"`
+}
+
+func (rof ReadOnlyFile) String() string {
+	sb := strings.Builder{}
+	sb.WriteString("{\n")
+
+	sb.WriteString("\tName: ")
+	sb.WriteString(rof.Name)
+
+	sb.WriteString(",\n\tPath: ")
+	sb.WriteString(rof.Path)
+
+	sb.WriteString(",\n\tAbsPath: ")
+	sb.WriteString(rof.AbsPath)
+
+	sb.WriteString(",\n\tIsDir: ")
+	if rof.IsDir {
+		sb.WriteString("true")
+	} else {
+		sb.WriteString("false")
+	}
+
+	sb.WriteString("\n}")
+	return sb.String()
 }
 
 func ListFilesInDir(dir string) ([]ReadOnlyFile, error) {
@@ -26,23 +51,24 @@ func ListFilesInDir(dir string) ([]ReadOnlyFile, error) {
 		return errReadingFileList(e, dir)
 	}
 
-	files := make([]ReadOnlyFile, len(children)+1)
-
-	i := 0
+	files := []ReadOnlyFile{}
 
 	if dir != "/" {
-		files[i], e = createParentDirEntry(dir)
-		i++
+		parentDir, e := createParentDirEntry(dir)
 		if e != nil {
 			return errReadingFileList(e, dir)
 		}
+
+		files = append(files, parentDir)
 	}
 
-	for ; i < len(children); i++ {
-		files[i], e = mapToReadOnlyFile(dir, children[i])
+	for i := 0; i < len(children); i++ {
+		child, e := mapToReadOnlyFile(dir, children[i])
 		if e != nil {
 			return errReadingFileList(e, dir)
 		}
+
+		files = append(files, child)
 	}
 
 	return files, nil

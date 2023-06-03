@@ -12,6 +12,7 @@
 
 	export let open_at = '.'
 	export let selected = null
+	export let onDoubleClick = () => {}
 
 	let files = []
 	let selectedIndex = null
@@ -26,16 +27,32 @@
 		}
 	}
 
+	const selectAndOpen = (i) => {
+		select(i)
+		onDoubleClick()
+	}
+
+	const sortByDirThenAlphaNumerically = (files) => {
+		files.sort((a, b) => {
+			const A_FIRST = -1
+			const B_FIRST = 1
+
+			if (a.name === '..') return A_FIRST
+			if (b.name === '..') return B_FIRST
+			if (a.isDir && !b.isDir) return A_FIRST
+			if (!a.isDir && b.isDir) return B_FIRST
+			return a.name < b.name ? A_FIRST : B_FIRST
+		})
+
+		return files
+	}
+
 	$: ToAbsPath(open_at)
-		.then((path) => {
-			open_at = path
-		})
-		.then(() => {
-			return ListFilesInDir(open_at)
-		})
-		.then((res) => {
-			files = res
-		})
+		.then((path) => (open_at = path))
+		.then(ListFilesInDir)
+		.then(sortByDirThenAlphaNumerically)
+		.then((res) => (files = res))
+		.then(reset)
 		.catch((e) => {
 			console.error(e)
 			files = []
@@ -43,13 +60,14 @@
 </script>
 
 <div class="file-selector">
-	{#each files as f, i (f.Name)}
+	{#each files as f, i (f.name)}
 		<div
 			on:click|stopPropagation={select(i)}
+			on:dblclick|stopPropagation={selectAndOpen(i)}
 			class="file"
 			class:selected-file={selectedIndex === i}>
-			{f.Name}
-			{#if f.IsDir}
+			{f.name}
+			{#if f.isDir}
 				<span>📁</span>
 			{/if}
 		</div>

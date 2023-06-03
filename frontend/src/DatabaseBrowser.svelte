@@ -16,30 +16,35 @@
 	let buttonText
 
 	const useSelectedFile = () => {
-		if (selected.IsDir) {
-			dir = selected.AbsPath
+		if (selected.isDir) {
+			dir = selected.absPath
 		} else {
-			on_select(selected.AbsPath)
+			on_select(selected.absPath)
 		}
 	}
 
 	const onDatabaseCreated = (file) => {
-		on_select(selected.AbsPath)
+		on_select(selected.absPath)
 	}
 
 	$: if (!selected) {
 		buttonText = '...'
-	} else if (selected.IsDir) {
+	} else if (selected.isDir) {
 		buttonText = 'Open'
 	} else {
 		buttonText = 'Connect'
 	}
 </script>
 
-<div class="database-browser-modal">
-	<div class="modal" on:click|stopPropagation={reset}>
+<div class="database-browser" on:click|stopPropagation={reset}>
+	<div class="vertical-container">
 		<div class="header">{dir}</div>
-		<FileSelector bind:open_at={dir} bind:selected bind:reset bind:refresh />
+		<FileSelector
+			onDoubleClick={useSelectedFile}
+			bind:open_at={dir}
+			bind:selected
+			bind:reset
+			bind:refresh />
 		<div class="spacer" />
 		<ButtonBar>
 			<Button disabled={!selected} on_click={useSelectedFile}>
@@ -48,41 +53,33 @@
 			<ButtonSpacer />
 			<Button type="cancel" on_click={on_close}>Close</Button>
 		</ButtonBar>
-		<div class="spacer" />
 		<CreateDatabaseBar {dir} on_create={refresh} />
 	</div>
 </div>
 
 <style>
-	.database-browser-modal {
+	.database-browser {
 		position: absolute;
 		top: 0;
 		left: 0;
 
-		display: flex;
-
-		width: 100vw;
-		height: 100vh;
+		width: 100%;
+		height: 100%;
 
 		background: rgba(0, 0, 0, 0.3);
 	}
 
-	.modal {
-		flex-grow: 1;
-
+	.vertical-container {
 		display: flex;
 		flex-direction: column;
 
-		margin: 4rem;
+		--vertical-container-margin: 4rem;
+		height: calc(100% - var(--vertical-container-margin) * 2);
+		margin: var(--vertical-container-margin);
 
 		background: lightgrey;
 		border: 2px solid goldenrod;
-		border-radius: 0.4rem;
-	}
-
-	.spacer {
-		flex-grow: 1;
-		border-bottom: 2px solid goldenrod;
+		border-radius: 0.3rem;
 	}
 
 	.header {
@@ -99,9 +96,8 @@
 		border-bottom: 2px solid goldenrod;
 	}
 
-	.divider {
-		margin: 0 0 2px 0;
-		padding: 0;
+	.spacer {
+		flex-grow: 1;
 
 		border-bottom: 2px solid goldenrod;
 	}
