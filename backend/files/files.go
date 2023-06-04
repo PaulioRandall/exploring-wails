@@ -3,7 +3,6 @@ package files
 import (
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/PaulioRandall/go-trackerr"
 )
@@ -12,37 +11,25 @@ var (
 	ErrReadingFileList = trackerr.New("Could not read files in directory")
 	ErrReadingFileStat = trackerr.New("Could not read file status (os.Stat)")
 	ErrCreatingAbsPath = trackerr.New("Could not create absolute file path")
+	ErrCheckingStatus  = trackerr.New("Could not check status of file")
 )
 
-type ReadOnlyFile struct {
-	Name    string `json:"name"`
-	Path    string `json:"path"`
-	AbsPath string `json:"absPath"`
-	IsDir   bool   `json:"isDir"`
+func ToAbsPath(path string) (string, error) {
+	absPath, e := filepath.Abs(path)
+	if e != nil {
+		return "", ErrCreatingAbsPath.CausedBy(e)
+	}
+	return absPath, nil
 }
 
-func (rof ReadOnlyFile) String() string {
-	sb := strings.Builder{}
-	sb.WriteString("{\n")
-
-	sb.WriteString("\tName: ")
-	sb.WriteString(rof.Name)
-
-	sb.WriteString(",\n\tPath: ")
-	sb.WriteString(rof.Path)
-
-	sb.WriteString(",\n\tAbsPath: ")
-	sb.WriteString(rof.AbsPath)
-
-	sb.WriteString(",\n\tIsDir: ")
-	if rof.IsDir {
-		sb.WriteString("true")
+func DoesFileExist(file string) (bool, error) {
+	if _, e := os.Stat(file); e == nil {
+		return true, nil
+	} else if trackerr.Is(e, os.ErrNotExist) {
+		return false, nil
 	} else {
-		sb.WriteString("false")
+		return false, ErrCheckingStatus.BecauseOf(e, "For '%s'", file)
 	}
-
-	sb.WriteString("\n}")
-	return sb.String()
 }
 
 func ListFilesInDir(dir string) ([]ReadOnlyFile, error) {
@@ -121,14 +108,6 @@ func createParentDirEntry(currDir string) (ReadOnlyFile, error) {
 	}
 
 	return rof, nil
-}
-
-func ToAbsPath(path string) (string, error) {
-	absPath, e := filepath.Abs(path)
-	if e != nil {
-		return "", ErrCreatingAbsPath.CausedBy(e)
-	}
-	return absPath, nil
 }
 
 func isFileDir(path string) (bool, error) {

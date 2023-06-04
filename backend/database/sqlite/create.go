@@ -6,6 +6,7 @@ import (
 	"github.com/PaulioRandall/go-trackerr"
 
 	"github.com/PaulioRandall/sourcery/backend/database"
+	"github.com/PaulioRandall/sourcery/backend/files"
 )
 
 var (
@@ -14,7 +15,15 @@ var (
 )
 
 func Create(file string) error {
-	// TODO
+	exists, e := files.DoesFileExist(file)
+	if e != nil {
+		return ErrCreatingDB.CausedBy(e)
+	}
+
+	if exists {
+		return ErrCreatingDB.Because("File already exists")
+	}
+
 	return ErrSQLite.CausedBy(trackerr.ErrTodo, ErrCreatingDB)
 }
 

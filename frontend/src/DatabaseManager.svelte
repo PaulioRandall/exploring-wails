@@ -1,5 +1,6 @@
 <script>
 	import { OpenDatabase } from '#backend'
+	import Modal from '#lib/Modal.svelte'
 	import DatabaseBrowser from './DatabaseBrowser.svelte'
 
 	let browsingForDB = false
@@ -15,7 +16,9 @@
 </script>
 
 {#if browsingForDB}
-	<DatabaseBrowser on_select={openDatabase} on_close={closeBrowser} />
+	<Modal>
+		<DatabaseBrowser on_select={openDatabase} on_close={closeBrowser} />
+	</Modal>
 {/if}
 
 <div
