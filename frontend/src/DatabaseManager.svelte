@@ -1,28 +1,59 @@
 <script>
-	import { OpenDatabase } from '#backend'
+	import { CreateDatabase, OpenDatabase } from '#backend'
 	import Modal from '#lib/Modal.svelte'
-	import DatabaseBrowser from './DatabaseBrowser.svelte'
+	import FileSelector from '#lib/file-selector/FileSelector.svelte'
+	import DatabaseControls from './DatabaseControls.svelte'
 
 	let browsingForDB = false
+	let managingDB = false // TODO
 	let dbFile = null
 
-	const toggleBrowser = () => (browsingForDB = !browsingForDB)
-	const closeBrowser = () => (browsingForDB = false)
+	const toggleManager = () => {
+		browsingForDB = !browsingForDB // false
+		//managingDB = !managingDB // TODO
+	}
+
+	const closeManager = () => {
+		browsingForDB = false
+		managingDB = false
+	}
+
+	const createDatabase = (file) => {
+		CreateDatabase(file)
+			.then(() => (dbFile = file))
+			.catch(console.error)
+			.finally(closeManager)
+	}
 
 	const openDatabase = (file) => {
 		browsingForDB = false
-		OpenDatabase(file).catch(console.error).finally(closeBrowser)
+		OpenDatabase(file)
+			.then(() => (dbFile = file))
+			.catch(console.error)
+			.finally(closeManager)
 	}
 </script>
 
+{#if managingDB}
+	<Modal>
+		<!--
+	
+		-->
+		<DatabaseControls />
+	</Modal>
+{/if}
+
 {#if browsingForDB}
 	<Modal>
-		<DatabaseBrowser on_select={openDatabase} on_close={closeBrowser} />
+		<FileSelector
+			do_create={createDatabase}
+			on_open={openDatabase}
+			on_close={closeManager} />
 	</Modal>
 {/if}
 
 <div
-	on:click|stopPropagation={toggleBrowser}
+	on:click|stopPropagation={toggleManager}
 	class="database-manager"
 	class:database-open={!!dbFile}>
 	DB

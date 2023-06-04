@@ -1,35 +1,24 @@
 <script>
 	import { ToAbsPath, ListFilesInDir } from '#backend'
 
-	export function reset() {
-		selectedIndex = null
-		selected = null
-	}
+	export const reset = () => (selectedIndex = null)
+	export const refresh = () => (dir = dir)
 
-	export function refresh() {
-		open_at = open_at
-	}
-
-	export let open_at = '.'
-	export let selected = null
-	export let onDoubleClick = () => {}
+	export let dir = '.'
+	export let on_click = (selected) => {}
+	export let on_double_click = (selected) => {}
 
 	let files = []
 	let selectedIndex = null
 
-	const select = (i) => {
+	const onClick = (i) => () => {
 		selectedIndex = i
-
-		if (selectedIndex == null) {
-			selected = null
-		} else {
-			selected = files[selectedIndex]
-		}
+		on_click(files[i])
 	}
 
-	const selectAndOpen = (i) => {
-		select(i)
-		onDoubleClick()
+	const onDoubleClick = (i) => () => {
+		selectedIndex = i
+		on_double_click(files[i])
 	}
 
 	const sortByDirThenAlphaNumerically = (files) => {
@@ -47,8 +36,8 @@
 		return files
 	}
 
-	$: ToAbsPath(open_at)
-		.then((path) => (open_at = path))
+	$: ToAbsPath(dir)
+		.then((path) => (dir = path))
 		.then(ListFilesInDir)
 		.then(sortByDirThenAlphaNumerically)
 		.then((res) => (files = res))
@@ -59,11 +48,11 @@
 		})
 </script>
 
-<div class="file-selector">
+<div class="file-list">
 	{#each files as f, i (f.name)}
 		<div
-			on:click|stopPropagation={select(i)}
-			on:dblclick|stopPropagation={selectAndOpen(i)}
+			on:click|stopPropagation={onClick(i)}
+			on:dblclick|stopPropagation={onDoubleClick(i)}
 			class="file"
 			class:selected-file={selectedIndex === i}>
 			{f.name}
@@ -75,7 +64,7 @@
 </div>
 
 <style>
-	.file-selector {
+	.file-list {
 		overflow-x: hidden;
 		overflow-y: scroll;
 	}
