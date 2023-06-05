@@ -1,5 +1,6 @@
 <script>
 	import { ToAbsPath, ListFilesInDir } from '#backend'
+	import { message, newErrorMsg, newSuccessMsg } from '#lib/messenger/store.js'
 
 	export const reset = () => (selectedIndex = null)
 	export const refresh = () => (dir = dir)
@@ -44,6 +45,7 @@
 		.then(reset)
 		.catch((e) => {
 			console.error(e)
+			message.set(newErrorMsg(e))
 			files = []
 		})
 </script>

@@ -1,5 +1,6 @@
 <script>
 	import { CreateDatabase, OpenDatabase } from '#backend'
+	import { message, newErrorMsg, newSuccessMsg } from '#lib/messenger/store.js'
 	import Modal from '#lib/Modal.svelte'
 	import FileSelector from '#lib/file-selector/FileSelector.svelte'
 	import DatabaseControls from './DatabaseControls.svelte'
@@ -20,16 +21,28 @@
 
 	const createDatabase = (file) => {
 		CreateDatabase(file)
-			.then(() => (dbFile = file))
-			.catch(console.error)
+			.then(() => {
+				dbFile = file
+				message.set(newSuccessMsg(`Database created: ${dbFile}`))
+			})
+			.catch((e) => {
+				console.error(e)
+				message.set(newErrorMsg(e))
+			})
 			.finally(closeManager)
 	}
 
 	const openDatabase = (file) => {
 		browsingForDB = false
 		OpenDatabase(file)
-			.then(() => (dbFile = file))
-			.catch(console.error)
+			.then(() => {
+				dbFile = file
+				message.set(newSuccessMsg(`Database opened: ${dbFile}`))
+			})
+			.catch((e) => {
+				console.error(e)
+				message.set(newErrorMsg(e))
+			})
 			.finally(closeManager)
 	}
 </script>

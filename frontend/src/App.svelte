@@ -1,5 +1,6 @@
 <script>
 	import DatabaseManager from './DatabaseManager.svelte'
+	import Messenger from '#lib/messenger/Messenger.svelte'
 	import menuTool from '#menu/+meta.js'
 	import { currTool } from '#tools/store.js'
 
@@ -11,6 +12,7 @@
 <div class="app">
 	<svelte:component this={$currTool.component} />
 	<DatabaseManager />
+	<Messenger />
 </div>
 
 <style>
